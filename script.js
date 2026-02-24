@@ -4,6 +4,32 @@
   const scrollProgress = document.getElementById('scrollProgress');
   const isMobile = () => window.innerWidth <= 768;
 
+  // initialize video thumbnails
+  document.querySelectorAll('.video-wrap[data-id]').forEach(wrap => {
+    const id = wrap.dataset.id;
+    const img = document.createElement('img');
+    img.src = 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
+    img.alt = '';
+    img.loading = 'lazy';
+
+    const playBtn = document.createElement('div');
+    playBtn.className = 'play-btn';
+
+    wrap.appendChild(img);
+    wrap.appendChild(playBtn);
+
+    wrap.addEventListener('click', function () {
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      wrap.innerHTML = '';
+      wrap.style.cursor = 'default';
+      wrap.appendChild(iframe);
+    });
+  });
+
   // smooth scroll on nav click
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
