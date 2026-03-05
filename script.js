@@ -4,11 +4,16 @@
   const scrollProgress = document.getElementById('scrollProgress');
   const isMobile = () => window.innerWidth <= 768;
 
-  // initialize video thumbnails
-  document.querySelectorAll('.video-wrap[data-id]').forEach(wrap => {
-    const id = wrap.dataset.id;
+  // initialize video thumbnails (YouTube + Instagram)
+  document.querySelectorAll('.video-wrap').forEach(wrap => {
+    const thumbSrc = wrap.dataset.thumb;
+    const ytId = wrap.dataset.id;
+    const href = wrap.dataset.href;
+
+    if (!thumbSrc) return;
+
     const img = document.createElement('img');
-    img.src = 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
+    img.src = thumbSrc;
     img.alt = '';
     img.loading = 'lazy';
 
@@ -18,16 +23,24 @@
     wrap.appendChild(img);
     wrap.appendChild(playBtn);
 
-    wrap.addEventListener('click', function () {
-      const iframe = document.createElement('iframe');
-      iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
-      iframe.setAttribute('frameborder', '0');
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.setAttribute('allowfullscreen', '');
-      wrap.innerHTML = '';
-      wrap.style.cursor = 'default';
-      wrap.appendChild(iframe);
-    });
+    if (ytId) {
+      // YouTube: click to replace with iframe
+      wrap.addEventListener('click', function () {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', '');
+        wrap.innerHTML = '';
+        wrap.style.cursor = 'default';
+        wrap.appendChild(iframe);
+      });
+    } else if (href) {
+      // Instagram: click to open in new tab
+      wrap.addEventListener('click', function () {
+        window.open(href, '_blank', 'noopener');
+      });
+    }
   });
 
   // smooth scroll on nav click
@@ -56,9 +69,10 @@
       scrollProgress.style.height = scrollPercent + '%';
     }
 
-    // find current section
+    // find current section (skip hero)
     let current = '';
     sections.forEach(section => {
+      if (section.id === 'home') return;
       const top = section.offsetTop - window.innerHeight * 0.4;
       if (scrollTop >= top) {
         current = section.id;
