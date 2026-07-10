@@ -5,13 +5,8 @@
   const isMobile = () => window.innerWidth <= 768;
 
   // initialize video thumbnails (YouTube + Instagram)
-  document.querySelectorAll('.video-wrap').forEach(wrap => {
-    const thumbSrc = wrap.dataset.thumb;
-    const ytId = wrap.dataset.id;
-    const href = wrap.dataset.href;
-
-    if (!thumbSrc) return;
-
+  function createThumbnail(wrap, thumbSrc) {
+    wrap.innerHTML = '';
     const img = document.createElement('img');
     img.src = thumbSrc;
     img.alt = '';
@@ -22,18 +17,40 @@
 
     wrap.appendChild(img);
     wrap.appendChild(playBtn);
+  }
+
+  document.querySelectorAll('.video-wrap').forEach(wrap => {
+    const thumbSrc = wrap.dataset.thumb;
+    const ytId = wrap.dataset.id;
+    const href = wrap.dataset.href;
+
+    if (!thumbSrc) return;
+
+    createThumbnail(wrap, thumbSrc);
 
     if (ytId) {
-      // YouTube: click to replace with iframe
-      wrap.addEventListener('click', function () {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1';
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-        iframe.setAttribute('allowfullscreen', '');
+      // YouTube: click to replace with iframe using YT Player
+      wrap.addEventListener('click', function playVideo() {
+        wrap.removeEventListener('click', playVideo);
+        
+        const playerDiv = document.createElement('div');
         wrap.innerHTML = '';
-        wrap.style.cursor = 'default';
-        wrap.appendChild(iframe);
+        wrap.appendChild(playerDiv);
+        
+        new YT.Player(playerDiv, {
+          height: '100%',
+          width: '100%',
+          videoId: ytId,
+          playerVars: { autoplay: 1 },
+          events: {
+            'onStateChange': function(event) {
+              if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                createThumbnail(wrap, thumbSrc);
+                wrap.addEventListener('click', playVideo);
+              }
+            }
+          }
+        });
       });
     } else if (href) {
       // Instagram: click to open in new tab

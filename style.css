@@ -164,7 +164,7 @@ a {
   text-transform: none;
   letter-spacing: 0.1em;
   opacity: 0.5;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -197,7 +197,7 @@ a {
 .project-role {
   font-size: 0.75rem;
   opacity: 0.45;
-  margin-bottom: 1.25rem;
+  margin-bottom: 2.5rem;
   text-transform: lowercase;
 }
 
