@@ -178,6 +178,10 @@ a {
   margin-bottom: 7rem;
 }
 
+#experiments .project-info {
+  margin-bottom: 2rem;
+}
+
 .project-info {
   display: flex;
   align-items: baseline;
