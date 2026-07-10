@@ -44,13 +44,13 @@
   });
 
   // smooth scroll on nav click
-  navLinks.forEach(link => {
+    navLinks.forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
       const targetId = link.getAttribute('href').slice(1);
       const target = document.getElementById(targetId);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   });
