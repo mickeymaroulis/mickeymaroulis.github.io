@@ -86,7 +86,7 @@ a {
 /* sections */
 .section {
   min-height: 100vh;
-  padding: 8rem 2rem 8rem 7rem;
+  padding: 8rem 2rem 2rem 7rem;
   max-width: 1000px;
   margin: 0 auto;
 }
