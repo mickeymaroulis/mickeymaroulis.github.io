@@ -178,6 +178,14 @@ a {
   margin-bottom: 7rem;
 }
 
+.section .project:last-child {
+  margin-bottom: 1rem;
+}
+
+#experiments .project:last-child {
+  margin-bottom: 1rem;
+}
+
 #experiments .project-role {
   margin-bottom: 0;
 }
